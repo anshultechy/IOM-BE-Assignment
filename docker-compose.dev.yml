@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  node:
+    build: .
+    image: node:11.11.0
+    container_name: docker_node
+    ports:
+      - 2019:2019
+      - 2020:2020
+      - 3019:3019
+      - 3020:3020
+    working_dir: /var/www
+    env_file:
+      - .env
+    command: ["make"]
+    volumes:
+      - ./:/var/www
+      - /var/www/node_modules
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - admin
+  postgres:
+    image: postgres:10-alpine
+    container_name: node_postgres
+    volumes:
+      - postgres-data:/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: apidb
+    restart: unless-stopped
+  admin:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 5432:5432
+volumes:
+  postgres-data:
