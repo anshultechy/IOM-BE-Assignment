@@ -17,7 +17,7 @@ const {
 //passport.use(strategy.google());
 //passport.use(strategy.bearer());
 const app = express();
-const io = socket.listen(app.listen(config.app.port));
+ 
 var bodyParser = require('body-parser');
 app.use(cors());
 app.use(helmet());
@@ -29,7 +29,7 @@ app.use(
         parameterLimit: 50000,
     })
 );
-report.startJob();
+report.startJob();/// this will start the job
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.json());
 app.use(passport.initialize());
@@ -74,10 +74,5 @@ app.use(
     '/public-files',
     express.static(path.join(__dirname, `/../${config.file.local_path}/public`))
 );
-
-
-io.sockets.on('connection', () => {
-    console.log('Express: Socket client connected');
-});
 
 module.exports = app;
